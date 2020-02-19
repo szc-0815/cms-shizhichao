@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shizhichao.cms.dao.ShouDao">
+	<insert id="add">
+		insert into cms_shou(id,text,url,user_id,created,articleId) values(#{s.id},#{s.text},#{s.url},#{s.user_id},#{s.created},#{s.articleid})
+	</insert>
+	<select id="selectByUserId" resultType="Comment">
+		
+		SELECT s.*,a.title from cms_shou s LEFT JOIN cms_article a on s.articleid = a.id
+		    where s.user_id=#{shou.user_id}
+		    <if test="shou.title!=null and shou.title!=''">
+			and a.title like '%${shou.title}%'
+			</if>
+		order by created desc
+	</select>
+	<select id="select" resultType="Shou">
+		select s.*,u.nickname,u.headimg 
+		from cms_shou s,cms_user u where s.user_id=u.id
+		<if test="shou.articleid!=null">
+			and s.articleId=#{shou.articleid}
+		</if>
+		order by created desc
+	</select>
+	<select id="list" resultType="Shou">
+		select * from cms_shou
+	</select>
+	<delete id="delete">
+		delete from cms_shou where id=#{id}
+	</delete>
+	<select id="list1" resultType="Shou">
+		SELECT s.*,a.title from cms_shou s LEFT JOIN cms_article a on s.articleid = a.id
+		
+		order by created desc
+	</select>
+</mapper>
